@@ -15,8 +15,6 @@ library(data.table)
 library(ggplot2)
 library(stringr)
 
-setwd("/Users/donttouch/DScience/ReproducibleResearch/W2")
-
 if(!file.exists('activity.csv')){
         unzip('activity.zip')
 }
