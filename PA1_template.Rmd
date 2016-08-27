@@ -11,7 +11,6 @@ browseURL("PA1_template.html")
 ```{r setoptions, echo=FALSE}
 knitr::opts_chunk$set(comment = NA)
 knitr::opts_chunk$set(error = TRUE)
-knitr::opts_chunk$set(fig.align="left")
 ```
 
 ## Loading and preprocessing the data
