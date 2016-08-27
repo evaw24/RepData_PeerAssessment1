@@ -183,7 +183,7 @@ of the imputing process.
 
 
 ```r
-tempDT <- mice(activity_dt, m=5, maxit=5,meth='pmm',seed=500)
+tempDT <- mice(activity_dt, m=5, maxit=5,meth='mean',seed=500)
 ```
 
 
@@ -210,7 +210,7 @@ xyplot(tempDT,steps ~ interval,pch=18,cex=1)
 
 ```r
 DTImputed<-data.table(completeDT)
-StepsByDayImputed<-DTImputed[,sum(na.omit(steps)),by=.(date)]
+StepsByDayImputed<-DTImputed[,sum(na.omit(steps)),by=.(as.Date(date,,'%Y-%m-%d'))]
 setnames(StepsByDayImputed,c("Date","TotalStepsPerDay"))
 ```
 ![](PA1_template_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
@@ -222,9 +222,9 @@ setnames(StepsByDayImputed,c("Date","TotalStepsPerDay"))
 out<-StepsByDayImputed[,.(mean(na.omit(TotalStepsPerDay)),median(na.omit(TotalStepsPerDay)))]
 ```
 
-Mean-Imputed: 1.0666115\times 10^{4}
+Mean-Imputed: 1.0766189\times 10^{4}
 
-Median-Imputed: 10571
+Median-Imputed: 1.0766189\times 10^{4}
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -239,20 +239,16 @@ DTImputed[,dayOfWeek:=ifelse(wday(as.Date(date,'%Y-%m-%d')) %in% c(0,6), 'weeken
 
 
 ```r
-avgStepsByIntervalImputed<-DTImputed[,mean(steps),by=list(interval,dayOfWeek)]
-avgStepsByIntervalImputed<-aggregate(steps ~ interval + dayOfWeek, data=DTImputed.mean)
+avgStepsByDayIntervalImputed<-DTImputed[,AvgSteps:=mean(steps),by=list(interval,dayOfWeek)]
 ```
 
-```
-Error in eval(expr, envir, enclos): object 'DTImputed.mean' not found
-```
 
 ```r
-ggplot(avgStepsByIntervalImputed,aes(interval,V1)) +
+ggplot(avgStepsByDayIntervalImputed,aes(interval,AvgSteps)) +
 geom_line() +
 facet_grid(dayOfWeek ~ .) +
-xlab("xx")+
-ylab("yy")
+xlab("5-min Interval") +
+ylab("Avg Number of Steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
